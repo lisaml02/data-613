@@ -1,0 +1,74 @@
+---
+title: "hw_02"
+author: "lisa liubovich"
+date: "2024-02-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 3
+
+```{r 3}
+team_A <- 3
+team_B <- 2
+
+if (team_A > team_B){
+  print("Team A won")
+} else if (team_A < team_B){
+  print("Team B won")
+} else {
+  print("Team A & B tied")
+}
+```
+
+# 4
+
+```{r 4}
+divisible_345 <- function(num) {
+  if (num %% 3 == 0 && num %% 5 == 0){
+    print("divisible by three and five")
+  } else if (num %% 3 == 0 && num %% 4 == 0){
+    print("divisible by three and four")
+  } else {
+    print("neither")
+  }
+}
+
+divisible_345(16)
+divisible_345(45)
+divisible_345(24)
+```
+
+# 5
+
+```{r load packages}
+library(tidyverse)
+data("mpg")
+```
+
+```{r 5 table}
+mpg <- mpg %>% 
+  select(displ, cyl, cty, hwy)
+
+mpg
+```
+
+```{r 5 }
+output <- vector("double", ncol(mpg))
+for (i in seq_along(mpg)){
+  output[[i]] <- var(mpg[[i]])
+}
+output
+```
+
+# 6
+
+```{r 6}
+for (i in c(11, 13, 17, 19, 23, 29)){
+ print((i^3)-(i^2))
+}
+
+```
