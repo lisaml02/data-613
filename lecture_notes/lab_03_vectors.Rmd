@@ -1,0 +1,114 @@
+---
+title: "lab_03_vectors"
+author: "lisa liubovich"
+date: "2024-02-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+# 1. 
+
+```{r}
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+```
+
+The vector shown above is an atomic vector because it is a homogeneous vector of just character elements.
+
+# 2. 
+
+```{r}
+V[3]
+```
+
+# 3. 
+
+```{r}
+V[c(1,3,5)]
+```
+
+# 4.
+
+```{r}
+V[2:5]
+```
+
+```{r}
+V[-1]
+```
+
+# 5.
+
+```{r}
+K <- list( x = 3:7, "never", 43, y = list(10,20,30))
+```
+
+The vector above is a list because it is heterogeneous. It is composed of multiple kinds of objects, such as lists, characters, and integers
+
+# 6.
+
+```{r}
+length(K)
+```
+
+# 7. 
+
+```{r}
+str(K['y'])
+```
+
+# 8.
+
+```{r}
+str(K[])
+```
+
+# 9.
+
+```{r}
+tribble( ~x, ~y, ~w, ~z,
+210, 300, 220, 180,
+102, 100, 119, 187,
+176, 175, 188, 173,
+87, 95, 91, 94,
+202, 210, 234, 218,
+110, 122, 131, 128,
+) -> dt
+
+```
+
+## a. 
+
+```{r}
+map_dbl(dt, mean)
+```
+
+## b. 
+
+```{r}
+map_dbl(dt, sd)
+```
+
+## c. 
+
+```{r}
+dt %>% 
+  map(sqrt)
+```
+
+## d.
+
+```{r}
+dt %>% 
+  map(summary)
+
+# or summary(dt)
+```
+
+# 
