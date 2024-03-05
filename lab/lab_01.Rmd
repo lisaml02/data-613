@@ -1,0 +1,77 @@
+---
+title: "lab_01"
+author: "lisa liubovich"
+date: "2024-01-25"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+DS 413/613  CLASSWORK/LAB   **Functions**
+
+Instructions:  Email your code and work (coding and output) by generating an Rmardown File and the default Word File.
+
+1) In three or four sentences, explain why constructing a Function . in order to execute tasks, is beneficial or advantageous
+
+Constructing a function to execute tasks is beneficial because it makes your code more efficient. Functions also make code more readable by providing structure and naming conventions. Functions are also easier to identify and fix specific issues while debugging.
+
+2)
+
+Write a function (using r code and structure demonstrated in class) to calculate a z score for a given observed value, a mean, and a standard deviation value. And then use your function to find a z score for the following problem. (Research the internet to find the formula used to calculate a z score)
+
+Observed value = 25.77,  mean =  23.54,  standard deviation = 2.442
+
+```{r}
+calculate_z_score <- function(observed_value, mean, standard_deviation) {
+  z_score <- (observed_value - mean) / standard_deviation
+  return(z_score)
+  }
+  
+observed_value <- 25.77
+mean_value <- 23.54
+std_deviation <- 2.442
+
+z_score_result <- calculate_z_score(observed_value, mean_value, std_deviation)
+print(paste("Z-Score:", round(z_score_result, 4)))
+```
+
+3)
+
+Write a function (using r code and the structure demonstrated in class) to calculate the natural log of a number multiplied by the common log of the same number divided by the cube root of a given prime number.
+
+Use your function to find the answer if the number to be used for both log expressions is 32 and the given prime number is 11.
+
+Also use R code to round your answer to the nearest tenth
+
+```{r}
+calculate_log_expression <- function(number, prime_number) {
+  result <- log(number) * log10(number) / (prime_number^(1/3))
+  return(result)
+}
+
+
+number_value <- 32
+prime_number <- 11
+
+log_expression_result <- calculate_log_expression(number_value, prime_number)
+rounded_result <- round(log_expression_result, 1)
+
+print(paste("Result of Logarithmic Expression:", rounded_result))
+
+```
+
+4)
+
+Use and show R coding to calculate the standard deviation for each variable of the data table **mtcars** using the **\"Special For Loop Method\"** demonstrated in the class notes.
+
+```{r}
+for (col in colnames(mtcars)) {
+  if (is.numeric(mtcars[[col]])) {
+    std_dev <- sd(mtcars[[col]])
+    print(paste("Standard Deviation for", col, ":", round(std_dev, 2)))
+  }
+}
+
+```

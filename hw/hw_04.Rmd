@@ -1,0 +1,96 @@
+---
+title: "hw_04"
+author: "lisa liubovich, melanie klein"
+date: "2024-02-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+# 1.
+
+```{r 1}
+data(iris)
+```
+
+```{r 1a}
+nrow(iris)
+map(iris, length)
+```
+
+```{r 1b}
+map_dbl(iris, n_distinct)
+```
+
+# 2.
+
+```{r 2}
+z <- matrix(nrow = 3, ncol = 5)
+for (m in 1:3) {
+  for ( n in 1:5) {
+    z[m, n] <- n - m
+  }
+}
+print(z)
+```
+
+# 3.
+
+```{r 3}
+tribble( ~mean, ~sd, ~n,
+        -10,   1,    10,
+          0,   1,    10,
+        10,    1,    10,
+        100,   1,    10
+        ) -> parameters
+
+pmap(parameters, rnorm)
+pmap(parameters, rnorm)
+```
+
+# 4.
+
+```{r 4}
+X <- list(12, 14, 15, 18, 19, 22,10,18,18)
+Mean <- list(16, 16, 16, 16, 16,16,16,16,16)
+sd <- list(2, 2, 2, 2, 2,2,2,2,2)
+```
+
+```{r 4a}
+# z score: (observed value - population mean)/standard deviation
+
+pmap_dbl(list(X,Mean,sd), function(first, second, third) ((first - second) / third))
+```
+
+```{r 4b}
+pmap_dbl(list(X,Mean,sd), function (first, second, third) ((first - second)/ third / sqrt(length(X))))
+```
+
+# 5.
+
+```{r 5}
+V = c(10,15,17,22,32,38,42)
+```
+
+```{r 5a}
+keep(V,V < 20)
+```
+
+```{r 5b}
+discard(V, V < 20)
+```
+
+# 6.
+
+```{r 6}
+U = list(10,15,"mary",22,32,"james",42)
+map(U, safely(~ .x + 15))
+```
+
+For each object in the vector, the safely function returns a result and an error. One of these will always be null. For vector U, the map function adds 15 to each element where possible. The objects where it is possible are integers , which return a result and a NULL for error, meaning that the function was able to add 15. For the character elements of the vector U, the safely function returns a NULL result (because 15 cannot be added to a string) and an error saying you can't add 15 to a non numeric argument. If it is possible to execute the function, you will get a result and a NULL error. If it is not possible to execute the function, you will get a NULL result and error.

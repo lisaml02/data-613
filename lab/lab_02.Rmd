@@ -1,0 +1,58 @@
+---
+title: "lab_02"
+author: "lisa liubovich"
+date: "2024-01-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+# 1.
+
+Write a function that will find the sum of the natural log, the common log and a log of base 2\
+for any given positive number. Use your function to find answers for the first five even integers.\
+Show all details and structure of your function. You should get five answers. The first two\
+answers are 1.994177 and 3.988354. (Your output should show the other three)
+
+```{r}
+sum_logs <- function(num) {
+  x = log(num) + log10(num) + log2(num)
+  return(x)
+}
+
+for (i in c(1:5)) {
+  sum_logs(2*i)
+  print(sum_logs(2*i))
+}
+
+
+```
+
+# 2.
+
+Use the if-else structure to print the statement "This is a big number" if the square of a value\
+is greater than or equal to 100 and the following statement is printed if the square of the\
+number is less than 100, "This is not a big number". Use and show values of assignment and if-\
+else structures that will output both statements.
+
+```{r}
+big_number <- function(num) {
+  if (num^2 >= 100)
+    result <- "This is a big number"
+  else
+    result <- "This is not a big number"
+  print(result)
+}
+
+big_number(15)
+big_number(5)
+```
+
+# 
