@@ -1,0 +1,77 @@
+---
+title: "lab_05"
+author: "lisa liubovich"
+date: "2024-03-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(dplyr)
+library(data.table)
+```
+
+```{r reading in data}
+flights <- fread("nycdata.csv")
+flights
+```
+
+# 1.
+
+```{r 1}
+flights[, .(year, month, day, hour)]
+```
+
+# 2.
+
+```{r 2}
+flights[carrier == "DL" & origin == "JFK"]
+```
+
+# 3.
+
+```{r 3}
+flights[carrier == "UA" & month == 3 & air_time < 330]
+```
+
+# 4.
+
+```{r 4}
+flights %>% 
+  filter(carrier == "UA", month == 3, air_time < 330)
+```
+
+# 5.
+
+```{r 5}
+flights[, c("speed") := .(distance / air_time)]
+flights
+```
+
+# 6.
+
+```{r 6}
+flights %>% 
+  mutate(speed = distance / air_time)
+```
+
+# 7.
+
+## a.
+
+```{r 7a}
+flights[carrier == "UA", carrier := "UniitedAir"]
+flights[carrier == "UniitedAir"]
+```
+
+## b.
+
+```{r 7b}
+flights %>% 
+  mutate(carrier = recode(carrier, "UA"= "UniitedAir")) %>% 
+  filter(carrier == "UniitedAir")
+```

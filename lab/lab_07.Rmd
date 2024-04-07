@@ -1,0 +1,62 @@
+---
+title: "sql_lab"
+author: "lisa liubovich"
+date: "2024-04-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(sqldf)
+```
+
+# 1.
+
+```{r 1}
+sqldf('SELECT *
+      FROM diamonds
+      WHERE price < 2000
+      LIMIT 20')
+
+sqldf('SELECT COUNT(*)
+      FROM diamonds
+      WHERE price < 2000
+      LIMIT 20')
+```
+
+there are 24,203 records with a price less than \$2000
+
+# 2.
+
+```{r 2}
+sqldf('SELECT *
+      FROM diamonds
+      WHERE (cut = "Ideal" OR cut = "Premium")
+      AND (clarity = "SI2")
+      LIMIT 20')
+
+sqldf('SELECT COUNT(*)
+      FROM diamonds
+      WHERE (cut = "Ideal" OR cut = "Premium")
+      AND (clarity = "SI2")
+      LIMIT 20')
+
+```
+
+there are 5,547 records with a premium or ideal cut and a clarity of SI2
+
+# 3.
+
+```{r 3}
+sqldf('SELECT DISTINCT clarity
+      FROM diamonds')
+
+sqldf('SELECT COUNT(DISTINCT clarity)
+      FROM diamonds')
+```
+
+there are 8 categories of clarity: SI2, SI1, VS1, VS2, VVS2, VVS1, I1, and IF
