@@ -1,0 +1,123 @@
+---
+title: "hw_09_sql"
+author: "lisa liubovich"
+date: "2024-04-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(sqldf)
+```
+
+# 1.
+
+```{r loading data}
+mpg <-sqldf("SELECT * FROM mpg")
+mpg
+```
+
+```{r 1}
+sqldf('SELECT COUNT(*) FROM mpg')
+```
+
+There are 234 records in the table.
+
+# 2.
+
+```{r 2}
+sqldf('SELECT DISTINCT class
+      FROM mpg')
+```
+
+The classes are compact, midsize, SUV, 2 seater, minivan, pickup, and subcompact.
+
+# 3.
+
+```{r 3}
+sqldf('SELECT COUNT (DISTINCT model)
+      FROM mpg')
+sqldf('SELECT DISTINCT model
+      FROM mpg')
+```
+
+There are 38 categories for models of cars. They are listed in the second data frame output above.
+
+# 4.
+
+```{r 4}
+sqldf('SELECT COUNT(*)
+      FROM mpg
+      WHERE trans = "manual(m5)"')
+```
+
+There are 58 manual(m5) cars in the table.
+
+# 5.
+
+```{r 5}
+sqldf('SELECT COUNT (*)
+      FROM mpg
+      WHERE (class = "compact")
+      AND (manufacturer = "audi")')
+```
+
+There are 15 compact cars made by Audi.
+
+# 6.
+
+```{r 6}
+sqldf('SELECT COUNT(*)
+      FROM mpg
+      WHERE (manufacturer = "chevrolet")
+      AND (model = "mustang")')
+```
+
+There are no Chevrolet cars that are a mustang model.
+
+# 7.
+
+```{r 7}
+sqldf('SELECT displ, model, manufacturer
+      FROM mpg
+      WHERE manufacturer = "land rover"
+      ORDER BY displ ASC')
+```
+
+The top 2 land rover cars with least engine displacements are both range rovers with displacements of 4.0 and 4.2 respectively.
+
+# 8.
+
+```{r 8}
+sqldf('SELECT manufacturer, model, class, year
+      FROM mpg
+      WHERE (year = 1999)
+      AND (class = "suv")
+      LIMIT 15')
+```
+
+# 9.
+
+```{r 9}
+sqldf('SELECT manufacturer, model, year, hwy
+      FROM mpg
+      WHERE (manufacturer = "ford" OR manufacturer = "dodge")
+      AND (year = 2008)
+      ORDER BY hwy DESC
+      LIMIT 10')
+```
+
+# 10.
+
+```{r 10}
+sqldf('SELECT manufacturer, model, class, hwy, displ, year
+      FROM mpg
+      WHERE (class = "compact" OR class = "pickup")
+      AND (hwy BETWEEN 15 AND 17)
+      ORDER BY displ ASC, year DESC
+      LIMIT 10')
+```
