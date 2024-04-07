@@ -1,0 +1,160 @@
+---
+title: "midterm"
+author: "lisa liubovich"
+date: "2024-03-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+# 1.
+
+```{r}
+divisible34 <- function(x) {
+  if (x %% 3 == 0 & x %% 4 == 0) {
+    print("this number is divisible by both 3 and 4")
+  } else {
+    print("this number is not divisible by 3 and 4")
+  }
+}
+
+divisible34(744)
+divisible34(159)
+
+```
+
+# 2.
+
+```{r}
+for (i in 10:6) {
+  print(i^3 - i^2)
+}
+ 
+```
+
+# 3.
+
+```{r 3}
+U <- c("Maine", "Texas", "Delaware", "Oregon", "Utah", "Vermont", "Ohio" )
+U
+```
+
+## a.
+
+U is an atomic vector because its elements are homogeneous.
+
+## b.
+
+```{r 3b}
+# method 1:
+U[5]
+# method 2:
+U[c(5)]
+```
+
+## c.
+
+```{r 3c}
+U[-7]
+```
+
+# 4.
+
+```{r 4}
+V = list("Chicago", k = list(2, 6, 18, 24, 36), FALSE, 12, 1.3, z = 1.20)
+V
+```
+
+## a.
+
+V is a list because its elements are not homeogeneous; it contains strings, lists, logicals, and integers.
+
+## b.
+
+```{r 4b}
+str(V[2])
+```
+
+## c.
+
+```{r 4c}
+str(V[3])
+```
+
+# 5.
+
+```{r}
+tribble( ~John, ~Raymond, ~Martha, ~Alice, ~Juan,
+86, 77, 81, 88, 90,
+79, 78, 85, 81, 78,
+76, 75, 88, 94, 81,
+84, 90, 71, 84, 89,
+100, 80, 93, 85, 84,
+90, 73, 70, 88, 93
+) -> TestScores
+TestScores
+```
+
+## a.
+
+```{r 5a}
+map_dbl(TestScores, mean)
+```
+
+## b.
+
+```{r 5b}
+map(TestScores, ~.^3)
+```
+
+## c.
+
+```{r 5c}
+convert_to_100 <- function(column) {
+  column <- rep(100, length(column))
+  return(column)
+}
+
+TestScores_100 <- map_df(TestScores, convert_to_100)
+
+
+print(TestScores_100)
+
+```
+
+# 6.
+
+```{r 6}
+n <- 4
+z <- matrix(nrow = n, ncol = n)
+for (i in 1:n) {
+  for (j in 1:n) {
+    z[i, j] <- (i^2) * (j^2)
+  }
+}
+print(z)
+
+```
+
+# 7.
+
+a)  `git clone`: This command is used to create a copy of an existing Git repository in a new directory. It downloads all the files and version history from the remote repository to your local machine, allowing you to work on the project locally.
+
+b)  `git init`: This command initializes a new Git repository in the current directory. It creates a hidden `.git` folder where Git stores all the necessary files and metadata to track changes and manage version control for your project.
+
+c)  `ls`: This is a command in Unix-like operating systems (including Linux and macOS) that lists the contents of a directory. It displays the files and directories within the specified directory.
+
+d)  `git add`: This command is used to stage changes for commit in Git. It adds modified, new, or deleted files to the staging area, preparing them to be included in the next commit.
+
+e)  `touch`: This command is used to create a new, empty file in Unix-like operating systems. It updates the access and modification times of the file if it already exists, or creates a new empty file if it doesn't.
+
+f)  `git push -u`: This command is used to push local commits to a remote repository and set up tracking for the current branch. The `-u` flag is used to specify the upstream branch, allowing subsequent pushes and pulls to be executed without specifying the remote and branch name.
+
+g)  `git commit -m`: This command is used to record changes to the repository with a commit message. The `-m` flag is followed by a brief, descriptive message that explains the changes made in the commit.
+
+h)  `git branch`: This command is used to manage branches in Git. It lists all existing branches in the repository, and can be used to create, delete, or switch between branches.
+
+i)  `git merge`: This command is used to integrate changes from one branch into another. It combines the changes made in a specified branch with the current branch, resulting in a new commit that incorporates both sets of changes.

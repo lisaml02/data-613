@@ -1,0 +1,96 @@
+---
+title: "hw_07"
+author: "lisa liubovich"
+date: "2024-03-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(dplyr)
+library(data.table)
+```
+
+# 1.
+
+```{r 1}
+CollegeData <- fread("Collegedata.csv")
+CollegeData
+```
+
+# 2.
+
+```{r 2}
+CollegeDatatd <- read_csv("./Collegedata.csv")
+CollegeDatatd
+```
+
+# 3.
+
+```{r 3}
+# using tidyverse
+nrow(CollegeData)
+ncol(CollegeData)
+```
+
+# 4.
+
+```{r 4}
+CollegeData[, .(INSTNM, SAT_AVG, ADM_RATE)]
+```
+
+# 5.
+
+```{r 5}
+CollegeData %>% 
+  select(INSTNM, SAT_AVG, ADM_RATE)
+```
+
+# 6.
+
+```{r 6}
+CollegeData[ADM_RATE <= 0.20 & SAT_AVG >= 1500, .(INSTNM, ADM_RATE, SAT_AVG)]
+```
+
+# 7.
+
+```{r 7}
+CollegeData[INSTNM == "American University"]
+```
+
+The admission rate is 25.91% and the average SAT score is 1262 for American University.
+
+# 8.
+
+```{r 8}
+fifteen <- CollegeData[order(-AGE_ENTRY)][1:15, .(INSTNM, AGE_ENTRY)]
+fifteen
+```
+
+# 9.
+
+```{r}
+# using tidyverse
+CollegeData %>%
+  filter(!is.na(AGE_ENTRY)) %>%
+  mutate(age_numeric = as.numeric(AGE_ENTRY)) %>%
+  summarize(min_age = min(age_numeric, na.rm = TRUE),
+            max_age = max(age_numeric, na.rm = TRUE),
+            QT_age1 = quantile(age_numeric, probs = 0.25, na.rm = TRUE),
+            QT_age3 = quantile(age_numeric, probs = 0.75, na.rm = TRUE),
+            mean_age = mean(age_numeric, na.rm = TRUE),
+            median_age = median(age_numeric, na.rm = TRUE))
+```
+
+# 10.
+
+```{r 10}
+CollegeDatatd %>% 
+  select(INSTNM, AGE_ENTRY) %>% 
+  arrange(desc(AGE_ENTRY)) %>% 
+  slice(1:15)
+```
