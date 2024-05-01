@@ -1,0 +1,74 @@
+---
+title: "Practice Project"
+author: "Sally Henley"
+date: "2024-04-10"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(dbplyr)
+```
+```{r}
+nocturia <- read.csv("nocturia.csv")
+View(nocturia)
+```
+# Data Cleaning
+```{r}
+nrow(nocturia)
+# We have 1264 rows in the data set.
+ncol(nocturia)
+# There are 37 variables in the data set.
+colnames(nocturia)
+head(nocturia, 10)
+
+# Checking all the data types of the variables.
+glimpse(nocturia)
+
+# First way 
+# nocturia$nocturia <- as.factor(nocturia$nocturia)
+# nocturia$hypertension <- as.factor(nocturia$hypertension)
+# nocturia$diabetes <- as.factor(nocturia$diabetes)
+# nocturia$dyslipidemia <- as.factor(nocturia$dyslipidemia)
+
+# Another way with functions 
+columns_to_convert <- c("nocturia", "hypertension", "diabetes", "dyslipidemia","diuretics","parkinsons", "cardiovascular_disease","stroke","kidney_disease")
+
+for (col_name in columns_to_convert) {
+  nocturia[[col_name]] <- as.factor(nocturia[[col_name]])
+}
+
+nocturia$rem_latency <- as.integer(nocturia$rem_latency)
+glimpse(nocturia)
+```
+
+# Removing the NA values
+```{r}
+na.omit(nocturia) -> nocturia
+
+head(nocturia,15)
+
+summary(nocturia)
+view(nocturia)
+nrow(nocturia)
+
+# We started with 1264 rows and in the process of removing the NA values we now have 750
+# rows. We are going to move on with this dataset because we do not need any NA values in the dataset.
+```
+## Checking outliers in the dataset.
+
+```{r}
+ggplot(data = nocturia) +
+  geom_boxplot(mapping = aes(y=alcohol))
+
+# When we plot the alcohol column from the nocturia dataset we observe there are a few outliers which are very big and can tamper with the data.
+```
+
+
+
+
+
+

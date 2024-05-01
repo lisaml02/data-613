@@ -1,0 +1,348 @@
+---
+title: "gradproj_graphics"
+author: "lisa liubovich"
+date: "2024-04-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(broom)
+library(GGally)
+```
+
+```{r loading data}
+nocturia <- read_csv("./nocturia.csv")
+na.omit(nocturia) -> nocturia
+nocturia
+```
+
+# Use ggplot coding to generate plots that convey interesting and impactful facts and trends of selected categorical and quantitative variables.
+
+```{r}
+nocturia$rem_latency <- as.numeric(nocturia$rem_latency)
+na.omit(nocturia) -> nocturia
+nocturia$rem_latency
+```
+
+Nocturia is too big to be run through ggpairs all at once, so I'll do a couple plots manually.
+
+Since the dataset is about nocturia and patients with sleep apnea, let's look at some relationships that might be meaningful:
+
+-   smoking vs sleep behavior
+
+-   alcohol vs sleep behavior
+
+-   health conditions vs sleep behavior
+
+-   gender vs. sleep behavior
+
+## Smoking vs. Sleep Behavior
+
+```{r pairs plot for smoking and sleep behavior}
+ggpairs(nocturia[, c("smoking", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r smoking vs. sleep behaviors}
+ggplot(nocturia, aes(x = smoking, y = apnea)) +
+  geom_point() +
+  ggtitle("Smoking vs. Avg Number of Sleep Apnea Events") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Average Number of Times per hour an Individual Stopped Breathing for 10+ seconds") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = sleep_efficiency)) +
+  geom_point() +
+  ggtitle("Smoking vs. Sleep Efficiency") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Percent of Time Spent Asleep While In Bed") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = arousal)) +
+  geom_point() +
+  ggtitle("Smoking vs. Arousal") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("average number of awakenings per hour") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = sleep_latency)) +
+  geom_point() +
+  ggtitle("Smoking vs. Sleep Latency") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Sleep latency (time it takes for a person to fall asleep) in minutes") +
+  theme_classic()
+```
+
+## Alcohol vs. Sleep Behavior
+
+```{r}
+ggpairs(nocturia[, c("alcohol", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r alcohol vs. sleep behavior}
+ggplot(nocturia, aes(x = alcohol, y = apnea)) +
+  geom_point() +
+  ggtitle("Alcohol vs. Avg Number of Sleep Apnea Events") +
+  xlab("Alcohol intake in grams per week") +
+  ylab("Average Number of Times per hour an Individual Stopped Breathing for 10+ seconds") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = alcohol, y = sleep_latency)) +
+  geom_point() +
+  ggtitle("Alcohol vs. Sleep Latency") +
+  xlab("Alcohol intake in grams per week") +
+  ylab("Sleep latency (time it takes for a person to fall asleep) in minutes") +
+  theme_classic()
+```
+
+## Health Conditions vs. Sleep Behavior
+
+```{r}
+ggpairs(nocturia[, c("diabetes", "cardiovascular_disease", "kidney_disease", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r diabetes vs. sleep behavior}
+ggplot(nocturia, aes(x = as.factor(diabetes), y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Incidents of Sleep Apnea") +
+  xlab("Does the individual have diabetes?") +
+  ylab("Number of Sleep Apnea Incidents") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(diabetes), y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Sleep Efficiency") +
+  xlab("Does the individual have diabetes?") +
+  ylab("How much time in bed spent asleep") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(diabetes), y = isi)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Level of Insomnia") +
+  xlab("Does the individual have diabetes?") +
+  ylab("severity of insomnia") +
+  scale_x_discrete(labels = c("No", "Yes"))
+```
+
+```{r cardiovascular disease vs. sleep behaviors}
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Incidents of Sleep Apnea") +
+  xlab("Does the individual have cardiovascular disease?") +
+  ylab("Number of Sleep Apnea Incidents") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Sleep Efficiency") +
+  xlab("Does the individual have Cardiovascular Disease?") +
+  ylab("How much time in bed spent asleep") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = isi)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Level of Insomnia") +
+  xlab("Does the individual have Cardiovascular Disease?") +
+  ylab("severity of insomnia") +
+  scale_x_discrete(labels = c("No", "Yes"))
+```
+
+## Sex vs. Sleep Behavior
+
+```{r}
+ggplot(nocturia, aes(x = sex, y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Sleep Apnea Incidents") +
+  xlab("Sex") +
+  ylab("Number of Sleep Apnea Incidents")
+
+ggplot(nocturia, aes(x = sex, y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Sleep Efficiency") +
+  xlab("Sex") +
+  ylab("Amount of Time in Bed Spent Sleeping")
+
+ggplot(nocturia, aes(x = sex, y = isi)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Level of Insomnia") +
+  xlab("Sex") +
+  ylab("Severity of Insomnia")
+```
+
+# Show evidence of new R coding to process and analyze data in the table that we did not cover in class
+
+One thing we didn't cover in class is multiple linear regression. To analyze this data, I am going to further explore the relationship between incidents of sleep apnea (Y), lifestyle (smoking and alcohol consumption), and health conditions like diabetes and cardiovascular disease, controlling for sex.
+
+## Step 1: EDA
+
+Let's look at the correlations between the variables we're choosing to work with.
+
+```{r step 1 eda}
+ggpairs(data = nocturia, c("apnea", "smoking", "alcohol", "diabetes", "cardiovascular_disease", "sex"))
+```
+
+We can see that alcohol and smoking are more correlated (not highly correlated) than other predictors. Their correlation isn't too high, so the risk of multicollinearity is not that bad, but we should be cognizant of it.
+
+## Step 2: Check Model Assumptions
+
+Before we can move forward with the multiple linear regression, we should make sure that our data satisfies all three assumptions for the multiple linear regression model
+
+```{r fitting model and residual plots to evaluate assumptions}
+nocturia <- nocturia %>%
+  mutate(sex = ifelse(sex == "M", 1, 0))
+lm_nocturia <- lm(apnea ~ smoking + alcohol + diabetes + cardiovascular_disease + sex, data = nocturia)
+anoct <- augment(lm_nocturia)
+ggplot(anoct, aes(x= .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+looks like there's some issues with constant variance. let's check for outliers
+
+```{r checking for outliers}
+leverage <- hatvalues(lm_nocturia)
+cooks_distance <- cooks.distance(lm_nocturia)
+threshold <- 4 / (nrow(nocturia) - length(coef(lm_nocturia)) - 1)
+ggplot(data.frame(Leverage = leverage, Cooks_Distance = cooks_distance), aes(x = Leverage, y = Cooks_Distance)) +
+  geom_point() +
+  geom_hline(yintercept = threshold, color = "red", linetype = "dashed") +
+  ggtitle("Leverage vs Cook's Distance") +
+  xlab("Leverage") +
+  ylab("Cook's Distance")
+```
+
+There is a high leverage point and high cooks distance points. Let's see if logging y helps at all.
+
+```{r log transformation}
+filtered_nocturia <- nocturia %>% 
+  filter(apnea > 0) %>% 
+  mutate(log_apnea = log(apnea))
+lm_nlog <- lm(log_apnea ~ smoking + alcohol + diabetes + cardiovascular_disease + sex, data = filtered_nocturia)
+anlog <- augment(lm_nlog)
+ggplot(anlog, aes(x= .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+that looks like it helped a little, but let's try logging one (or more) of the x variables to see if that helps.
+
+```{r log transformation on x}
+filtered_nocturia <- nocturia %>% 
+  filter(!is.na(smoking) & smoking > 0) %>%
+  mutate(log_smoking = log(smoking)) %>% 
+  filter(apnea > 0) %>% 
+  mutate(log_apnea = log(apnea))
+lm_nlog2 <- lm(log_apnea ~ log_smoking + alcohol + diabetes + cardiovascular_disease + sex, data = filtered_nocturia)
+anlog2 <- augment(lm_nlog2)
+ggplot(anlog2, aes(x= .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+Looks way better, but for laughs, let's log alcohol too.
+
+```{r logging alcohol}
+filtered_nocturia2 <- nocturia %>% 
+  filter(!is.na(smoking) & smoking > 0) %>%
+  mutate(log_smoking = log(smoking)) %>% 
+  filter(apnea > 0) %>% 
+  mutate(log_apnea = log(apnea)) %>% 
+  filter(!is.na(alcohol) & alcohol > 0) %>% 
+  mutate(log_alcohol = log(alcohol))
+lm_nlog3 <- lm(log_apnea ~ log_smoking + log_alcohol + diabetes + cardiovascular_disease + sex, data = filtered_nocturia2)
+anlog3 <- augment(lm_nlog3)
+ggplot(anlog3, aes(x= .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+This seems the best; we have constant vertical spread, there doesn't seem to be a clear pattern, and there is no visible curve. Then this is our final model for now.
+
+## Step 3: Fit Model and Interpretation
+
+Let's fit a model.
+
+```{r fitting preliminart model}
+lm_noctprelim <- lm(log_apnea ~ log_smoking + log_alcohol + diabetes + cardiovascular_disease + sex, data = filtered_nocturia2)
+tidy(lm_noctprelim, conf.int = TRUE)
+```
+
+Our fitted regression surface is:
+
+log$Y_{i}$ = 1.223 - 0.015log($X_{1}$) - 0.065log($X_2$) - 0.012$X_3$ + 0.081$X_4$ + 1.185$X_5$
+
+where log($Y_{i}$ ) is the logged average number of times per hour an individual stopped breather for 10 seconds or longer, log$(X_1$) is the logged smoking frequency in packs smoked per day times the number of years as a smoker, log($X_2$) is the logged alcohol intake in grams per week, $X_3$ is whether or not a person has diabetes (1 = yes, 0 = no), $X_4$ is whether or not a person has cardiovascular disease (1 = yes, 0 = no), and $X_5$ is the sex of the individual (1 = male, 0 = female).
+
+In order to interpret our model, we need to return the variables into the original scale. We can do this by exponentiating both sides.
+
+The equivalent form of our regression surface is:
+
+$Y_{i}$ = $e^{1.223}$ - $X_1^{-0.015}$ - $X_2^{-0.065}$ - $e^{-0.012X_3}$ + $e^{0.081X_4}$ + $e^{1.185X_5}$
+
+where $Y_{i}$ is the average number of timesper hour an individual stopped breather for 10 seconds or longer, $X_1$ is smoking frequency in packs smoked per day times the number of years as a smoker, $X_2$ is the alcohol intake in grams per week, $X_3$ is whether or not a person has diabetes (1 = yes, 0 = no), $X_4$ is whether or not a person has cardiovascular disease (1 = yes, 0 = no), and $X_5$ is the sex of the individual (1 = male, 0 = female).
+
+```{r exponentiation}
+# intercept
+exp(1.223)
+
+# X3
+exp(-0.012)
+#X4
+exp(0.081)
+#X5
+exp(1.185)
+```
+
+Interpretation of regression coefficients with 95% confidence intervals:
+
+-   $\beta_0$ = 1.223 ; the y-intercept, the expected value of the apnea index when the individual has never smoked, drinks no alcohol, does not have diabetes, does not have cardiovascular disease, and is a woman is e^1.223^.
+
+-   $\beta_1$ = -0.015; For every additional pack of cigarettes smoked per day times the number of years as a smoker, the apnea index is approximately 1.5% lower on average, adjusting for alcohol consumption, diabetes status, cardiovascular disease status, and sex.
+
+-   $\beta_2$ = - 0.065; for every additional gram of alcohol intake, the apnea index is approximately 6.5% lower on average, adjusting for cigarette consumption, diabetes status, cardiovascular status, and sex.
+
+-   $\beta_3$ = -0.012; if a person has diabetes, the apnea index is e^-0.012^ more (approximately 98.8% lower) on average than if they do not have diabetes, adjusting for alcohol consumption, cigarette consumption, cardiovascular disease status, and sex.
+
+-   $\beta_4$ = 0.081; if a person has cardiovascular disease, the apnea index is e^0.081^ more (approximately 8.4% more) on average than if they do not have cardiovascular disease, adjusting for alcohol consumption, cigarette consumption, diabetes status, and sex
+
+-   $\beta_5$ = 1.185; if a person is a man, the apnea index is e^1.185^ more (approximately 3.27 times more) on average than if the person is a woman, adjusting for alcohol consumption, cigarette consumption, diabetes status, cardiovascular disease status.
+
+We can evaluate the associations between the predictor variables and outcome variable with a set of F-tests.
+
+### Overall F-Test
+
+In this test, we are testing if Y is associated with the set of X variables (every single predictor).
+
+$H_0$ : $\beta_1$ = $\beta_2$ = $\beta_3$ = $\beta_4$ = $\beta_5$ = 0 $\rightarrow$ reduced model: $Y_{i}$ = $\beta_0$ + $\varepsilon_{i}$ (none of the predictors are associated with apnea)
+
+$H_A$ : at least one $\beta$ does not equal 0 $\rightarrow$ full model: $Y_{i}$ = $\beta_0$ + $\beta_1$ $X_i1$ + $\beta_2$ $X_{i2}$ + $\beta_3$ $X_{i3}$ + $\beta_4$ $X_{i4}$ + $\beta_5$ $X_{i5}$ + $\varepsilon_{i}$
+
+```{r overall f test}
+glance(lm_noctprelim)
+```
+
+The statistic is 0.2925 and the p-value is 0.916, indicating that none of these predictors are significantly associated with apnea. This is also reflected in the R^2^ value (0.0135), which indicates that only 1.35% of the variability in Y is explained by the set of X variables.
+
+### Partial F-Tests
+
+```{r}
+# for log_smoking
+reduced_model <- lm(log_apnea ~ log_alcohol + diabetes + cardiovascular_disease + sex, data = filtered_nocturia2)
+anova(reduced_model, lm_noctprelim)
+```
+
+log_smoking is not significantly associated with apnea, given the other predictors in the model.
+
+### F-test lack of fit
+
+With this test, we are evaluating the overall fit of the model.
+
+```{r}
+anova(lm_noctprelim, test = "F")
+```
+
+The high p-values indicates that this model suffers from lack of fit.

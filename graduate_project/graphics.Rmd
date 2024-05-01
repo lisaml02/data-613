@@ -1,0 +1,174 @@
+---
+title: "gradproj_graphics"
+author: "lisa liubovich"
+date: "2024-04-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(broom)
+library(GGally)
+```
+
+```{r loading data}
+nocturia <- read_csv("./nocturia.csv")
+na.omit(nocturia) -> nocturia
+nocturia
+```
+
+# Use ggplot coding to generate plots that convey interesting and impactful facts and trends of selected categorical and quantitative variables.
+
+```{r}
+nocturia$rem_latency <- as.numeric(nocturia$rem_latency)
+na.omit(nocturia) -> nocturia
+nocturia$rem_latency
+```
+
+Nocturia is too big to be run through ggpairs all at once, so I'll do a couple plots manually.
+
+Since the dataset is about nocturia and patients with sleep apnea, let's look at some relationships that might be meaningful:
+
+-   smoking vs sleep behavior
+
+-   alcohol vs sleep behavior
+
+-   health conditions vs sleep behavior
+
+-   gender vs. sleep behavior
+
+## Smoking vs. Sleep Behavior
+
+```{r pairs plot for smoking and sleep behavior}
+ggpairs(nocturia[, c("smoking", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r smoking vs. sleep behaviors}
+ggplot(nocturia, aes(x = smoking, y = apnea)) +
+  geom_point() +
+  ggtitle("Smoking vs. Avg Number of Sleep Apnea Events") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Average Number of Times per hour an Individual Stopped Breathing for 10+ seconds") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = sleep_efficiency)) +
+  geom_point() +
+  ggtitle("Smoking vs. Sleep Efficiency") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Percent of Time Spent Asleep While In Bed") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = arousal)) +
+  geom_point() +
+  ggtitle("Smoking vs. Arousal") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("average number of awakenings per hour") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = smoking, y = sleep_latency)) +
+  geom_point() +
+  ggtitle("Smoking vs. Sleep Latency") +
+  xlab("Packs Smoked Per Day times Number of Years Smoking") +
+  ylab("Sleep latency (time it takes for a person to fall asleep) in minutes") +
+  theme_classic()
+```
+
+## Alcohol vs. Sleep Behavior
+
+```{r}
+ggpairs(nocturia[, c("alcohol", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r alcohol vs. sleep behavior}
+ggplot(nocturia, aes(x = alcohol, y = apnea)) +
+  geom_point() +
+  ggtitle("Alcohol vs. Avg Number of Sleep Apnea Events") +
+  xlab("Alcohol intake in grams per week") +
+  ylab("Average Number of Times per hour an Individual Stopped Breathing for 10+ seconds") +
+  theme_classic()
+
+ggplot(nocturia, aes(x = alcohol, y = sleep_latency)) +
+  geom_point() +
+  ggtitle("Alcohol vs. Sleep Latency") +
+  xlab("Alcohol intake in grams per week") +
+  ylab("Sleep latency (time it takes for a person to fall asleep) in minutes") +
+  theme_classic()
+```
+
+## Health Conditions vs. Sleep Behavior
+
+```{r}
+ggpairs(nocturia[, c("diabetes", "cardiovascular_disease", "kidney_disease", "apnea", "arousal", "sleep_efficiency", "sleep_latency")])
+```
+
+```{r diabetes vs. sleep behavior}
+ggplot(nocturia, aes(x = as.factor(diabetes), y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Incidents of Sleep Apnea") +
+  xlab("Does the individual have diabetes?") +
+  ylab("Number of Sleep Apnea Incidents") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(diabetes), y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Sleep Efficiency") +
+  xlab("Does the individual have diabetes?") +
+  ylab("How much time in bed spent asleep") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(diabetes), y = isi)) +
+  geom_boxplot() +
+  ggtitle("Diabetes vs. Level of Insomnia") +
+  xlab("Does the individual have diabetes?") +
+  ylab("severity of insomnia") +
+  scale_x_discrete(labels = c("No", "Yes"))
+```
+
+```{r cardiovascular disease vs. sleep behaviors}
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Incidents of Sleep Apnea") +
+  xlab("Does the individual have cardiovascular disease?") +
+  ylab("Number of Sleep Apnea Incidents") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Sleep Efficiency") +
+  xlab("Does the individual have Cardiovascular Disease?") +
+  ylab("How much time in bed spent asleep") +
+  scale_x_discrete(labels = c("No", "Yes"))
+
+ggplot(nocturia, aes(x = as.factor(cardiovascular_disease), y = isi)) +
+  geom_boxplot() +
+  ggtitle("Cardiovascular Disease vs. Level of Insomnia") +
+  xlab("Does the individual have Cardiovascular Disease?") +
+  ylab("severity of insomnia") +
+  scale_x_discrete(labels = c("No", "Yes"))
+```
+
+## Sex vs. Sleep Behavior
+
+```{r}
+ggplot(nocturia, aes(x = sex, y = apnea)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Sleep Apnea Incidents") +
+  xlab("Sex") +
+  ylab("Number of Sleep Apnea Incidents")
+
+ggplot(nocturia, aes(x = sex, y = sleep_efficiency)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Sleep Efficiency") +
+  xlab("Sex") +
+  ylab("Amount of Time in Bed Spent Sleeping")
+
+ggplot(nocturia, aes(x = sex, y = isi)) +
+  geom_boxplot() +
+  ggtitle("Sex vs. Level of Insomnia") +
+  xlab("Sex") +
+  ylab("Severity of Insomnia")
+```
