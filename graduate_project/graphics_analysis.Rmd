@@ -297,7 +297,7 @@ exp(0.081)
 exp(1.185)
 ```
 
-Interpretation of regression coefficients with 95% confidence intervals:
+Interpretation of regression coefficients:
 
 -   $\beta_0$ = 1.223 ; the y-intercept, the expected value of the apnea index when the individual has never smoked, drinks no alcohol, does not have diabetes, does not have cardiovascular disease, and is a woman is e^1.223^.
 

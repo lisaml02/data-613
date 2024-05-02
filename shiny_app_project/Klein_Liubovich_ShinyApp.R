@@ -20,7 +20,13 @@ dccovid <- dccovid %>%
 ui <- fluidPage(
   titlePanel("DC Covid Tests in 2021"),
   h3("Melanie Klein and Lisa Liubovich", align = "left", style = "color:black"),
-  p("description", align = "left", style = "color:black"),
+  p("This data set contains test data taken (and cleaned) from the COVID-19 surveillance website, which is run by the DC government. These data were downloaded on July 21st, 2021. Variables include:
+   day (The day of the measurements),
+   cleared (Number of individuals cleared from isolation),
+   lost (Total number of COVID deaths),
+   dctested (Total number of DC residents tested),
+   tested (Total overall number of tests),
+    positives (Total number of positive test results)", align = "left", style = "color:black"),
   setBackgroundColor(
     color = c("red", "white","blue"),
     gradient = "linear",
@@ -37,17 +43,13 @@ ui <- fluidPage(
                   max = as.Date("2021-07-19"),
                   value = c(as.Date("2020-05-22"), as.Date("2021-07-19")),
                   step = 1),
-      sliderInput("bins",
-                  label = "Number of Bins:",
-                  min = 1,
-                  max = 423,
-                  value = 14)
     ),
     mainPanel(
       tabsetPanel(type = "tab",
                   tabPanel("Scatterplot", plotOutput("Scatterplot")),
-                  tabPanel("Histogram", plotOutput("Histogram")),
-                  tabPanel("Table", DT::DTOutput("Table"))
+                  tabPanel("Bar Graph", plotOutput("BarGraph")),
+                  tabPanel("Table", DT::DTOutput("Table")),
+                  tabPanel("Summary" , verbatimTextOutput("summ"))
       ))))
 
 server <- function(input, output) {
@@ -59,18 +61,22 @@ server <- function(input, output) {
   })
   
   output$Scatterplot <- renderPlot({
-    ggplot(filtered_data(), aes(x = .data[[input$XVar]], y = .data[[input$YVar]])) +
+    ggplot(filtered_data(), aes(x = day, y = .data[[input$YVar]])) +
       geom_point(color = "red")
   })
   
-  output$Histogram <- renderPlot({
-    ggplot(filtered_data(), aes(x = .data[[input$XVar]])) +
-      geom_histogram(binwidth = 0.5, fill = "blue", color = "black", bins = input$bins) +
-      ggtitle("Histogram")
+  output$BarGraph <- renderPlot({
+    ggplot(filtered_data(), aes(x = day, y = .data[[input$YVar]])) +
+      geom_bar(stat = "identity", fill = "blue", color = "black")
   })
   
   output$Table <- DT::renderDT({
     DT::datatable(filtered_data())
+  })
+
+  output$summ <- renderPrint({
+  
+   summary(filtered_data())
   })
 }
 
